@@ -79,6 +79,13 @@ sysctl::settings:
   net.ipv4.ip_forward: 0
   vm.swappiness: 10
 ```
+Set lookup_options as deep merge
+
+```yaml
+lookup_options:
+  sysctl::settings:
+    merge: deep
+```
 
 **2. Define overrides for specific nodes in `nodes/db-server.example.com.yaml`:**
 ```yaml
@@ -99,14 +106,6 @@ class sysctl {
     }
   }
 }
-```
-
-Or in hiera:
-
-```yaml
-lookup_options:
-  sysctl::settings:
-    merge: deep
 ```
 
 In this scenario, `db-server.example.com` will receive `net.ipv4.ip_forward: 0` from common, and `vm.swappiness` will be cleanly overridden to `5`!
