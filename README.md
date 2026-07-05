@@ -9,7 +9,7 @@ Managing `sysctl` settings is a critical part of system administration and secur
 ### Why this module is better than Augeas-based providers:
 
 * **No More Parsing Failures:** Augeas relies on strict file lenses to map text files to trees. If a configuration file contains unexpected spacing, inline comments, or syntax anomalies, Augeas can fail to parse the file entirely. This native provider uses robust, flexible Regular Expressions to read and parse configurations safely.
-* **Automatic Duplicate Cleanup:** A common bug in Augeas providers is that they can append duplicate configuration lines instead of updating existing ones. This provider scans the entire file, updates only the last active setting, and automatically purges all prior duplicate lines.
+* **Automatic Duplicate Cleanup & Self-Healing:** A common bug in Augeas providers is that they can append duplicate configuration lines instead of updating existing ones. This provider scans the entire file. If it finds duplicate entries for a key—even if the value is correct—it flags the resource as out of sync (corrective) and automatically purges all duplicates, keeping only a single, clean line.
 * **Flexible Declarations (Title Patterns):** Supports both separated property declarations and compound title declarations, allowing you to write clean manifests and easily structure your Hiera data.
 * **Handling Spacing Variations:** Spacing variations like `key=value`, `key = value`, and `key   =   value` are automatically matched, cleaned, and standardized to `key = value`.
 
@@ -99,6 +99,14 @@ class sysctl {
     }
   }
 }
+```
+
+Or in hiera:
+
+```yaml
+lookup_options:
+  sysctl::settings:
+    merge: deep
 ```
 
 In this scenario, `db-server.example.com` will receive `net.ipv4.ip_forward: 0` from common, and `vm.swappiness` will be cleanly overridden to `5`!
