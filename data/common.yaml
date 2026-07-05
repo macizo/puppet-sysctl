@@ -1,0 +1,23 @@
+sysctl::settings:
+  # --- Network Security (Disable Packet Forwarding unless it's a router) ---
+  net.ipv4.ip_forward: 0
+  net.ipv6.conf.all.forwarding: 0
+
+  # --- SYN Flood Protection (Mitigates Denial of Service attacks) ---
+  net.ipv4.tcp_syncookies: 1
+
+  # --- Spoofing Protection (Reverse Path Filtering) ---
+  # Ensures the server only accepts incoming packets from routes it can send replies to
+  net.ipv4.conf.all.rp_filter: 1
+  net.ipv4.conf.default.rp_filter: 1
+
+  # --- Ignore ICMP Redirects (Mitigates Man-in-the-Middle attacks) ---
+  # Do not accept routed redirect packets
+  net.ipv4.conf.all.accept_redirects: 0
+  net.ipv4.conf.default.accept_redirects: 0
+  net.ipv6.conf.all.accept_redirects: 0
+  net.ipv6.conf.default.accept_redirects: 0
+
+  # --- System Performance & Memory Stability ---
+  # Keep swappiness low (10) to prioritize RAM usage and avoid slow disk swapping
+  vm.swappiness: 10
