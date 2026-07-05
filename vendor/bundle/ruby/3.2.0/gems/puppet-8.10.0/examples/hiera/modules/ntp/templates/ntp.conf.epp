@@ -1,3 +1,0 @@
-<% $ntp::config::ntpservers.each |$server| { -%>
-server <%= $server %>
-<% } -%>
